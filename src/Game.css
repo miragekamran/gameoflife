@@ -1,0 +1,29 @@
+.Board {
+    background-image: linear-gradient(#333 1px, transparent 1px),
+        linear-gradient(90deg, #333 1px, transparent 1px);
+    position: relative;
+    margin: 0 auto;
+    background-color: #000;
+}
+
+.Cell {
+    background: #ccc;
+    position: absolute;
+}
+
+.text-box {
+    background: gray;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 12px 2px rgba(black, 0.6);
+    transition: 0.2s;
+    text-align: left;
+}
+
+/* p {
+    background: gray;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: flex-start; */
+/* text-justify: distribute-all-lines;
+} */
