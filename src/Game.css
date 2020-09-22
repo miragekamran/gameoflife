@@ -1,3 +1,165 @@
+body {
+  background-image: url(https://www.itl.cat/pngfile/big/14-146363_dark-blue-background-wallpaper-hd-clipartsgram-solid-color.jpg)
+}
+
+h3, h4 {
+  color: white;
+  margin: auto;
+  text-align: center;
+  width: 50%;
+  margin-top: 10px;
+}
+
+
+h4 {
+  margin-top: 0px;
+}
+
+.main-title {
+  color: #fac028;
+  margin: auto;
+  text-align: center;
+  width: 50%;
+  margin-top: 30px;
+  font-size: 70px;
+  border-style: dashed;
+  padding-bottom: 20px;
+}
+
+.generations-title {
+  color: #ea3b01;
+  margin: auto;
+  text-align: center;
+  width: 50%;
+  margin-top: 30px;
+  font-size: 40px;
+  background-color: white;
+  border-style: dotted;
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+
+.cell {
+  display: inline-block;       
+  border: 1px solid black;
+  width: 15px;
+  height: 15px;
+  margin-left: -1px;
+  margin-bottom: -1px;
+  }
+
+.off {
+  background-color: #fac028;
+}
+
+.on {
+  background-color: black;
+}
+  
+.cell:hover { 
+  background: #f02727;
+}
+
+.grid {
+  width: 150px;
+  line-height: 0;
+  margin: auto;
+  box-shadow: 0px 0px 50px #eded00;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+
+.buttonsCell {
+  margin: auto;
+  display: table;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  background-color: #e2e22e;
+  padding-top: 15px;
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-bottom: 15px;
+  border-style: dashed
+}
+
+.buttons {
+  margin: 2px;
+  /* padding-right: 10px;
+  padding-left: 10px; */
+  width: 85px;
+}
+/* 
+.patternButtonsCell {
+  margin: auto;
+  display: table;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  background-color: #e2e22e;
+  padding-top: 15px;
+  padding-right: 105px;
+  padding-left: 105px;
+  padding-bottom: 15px;
+  border-style: dashed;
+  
+}
+
+.pattern-cells {
+  margin: 2px;
+  width: 150px;
+  margin-left: 10px;
+  background-color: red;
+}
+
+.patterns-title {
+  text-align: center;
+  color: black;
+  margin-bottom: 15px;
+}
+
+.aboutCell {
+  margin: auto;
+  display: table;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  background-color: white;
+  padding-top: 15px;
+  padding-right: 55px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  border-style: dashed;
+  width: 50%
+}
+
+.aboutCell-title {
+  font-size: 35px;
+  color: #120065;
+}
+
+.aboutCell-secTitle {
+  font-size: 30px;
+  color: #ff2d00;
+}
+
+.aboutCell-thirdTitle {
+  font-size: 30px;
+  color: black;
+}
+
+.aboutCell-paragraph {
+  font-size: 25px;
+}
+
+.aboutCell-ul {
+  font-size: 25px;
+} */
+
+.footer {
+  color: white;
+  text-align: center;
+}
+
+
 .Board {
     background-image: linear-gradient(#333 1px, transparent 1px),
         linear-gradient(90deg, #333 1px, transparent 1px);
@@ -20,10 +182,3 @@
     text-align: left;
 }
 
-/* p {
-    background: gray;
-    display: flex;
-    flex-direction: column;
-    /* justify-content: flex-start; */
-/* text-justify: distribute-all-lines;
-} */

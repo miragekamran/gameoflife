@@ -1,294 +1,189 @@
 import React from "react";
+import About from "./components/About";
+import arrayClone from "./components/helperFunctions";
+import Grid from "./components/Grid";
+import Buttons from "./components/Buttons";
 import "./Game.css";
-
-const CELL_SIZE = 20;
-const WIDTH = 800;
-const HEIGHT = 600;
-
-class Cell extends React.Component {
-    render() {
-        const { x, y } = this.props;
-        return (
-            <div
-                className="Cell"
-                style={{
-                    left: `${CELL_SIZE * x + 1}px`,
-                    top: `${CELL_SIZE * y + 1}px`,
-                    width: `${CELL_SIZE - 1}px`,
-                    height: `${CELL_SIZE - 1}px`
-                }}
-            />
-        );
-    }
-}
 
 class Game extends React.Component {
     constructor() {
         super();
-        this.rows = HEIGHT / CELL_SIZE;
-        this.cols = WIDTH / CELL_SIZE;
-        this.board = this.makeEmptyBoard();
-    }
+        // create vars for speed, rows and columns
+        // the grid is going to be 50X30
+        this.speed = 100;
+        this.rows = 30;
+        this.columns = 50;
 
-    state = {
-        cells: [],
-        isRunning: false,
-        interval: 100
-    };
-
-    runGame = () => {
-        this.setState({ isRunning: true });
-        this.runIteration();
-    };
-
-    stopGame = () => {
-        this.setState({ isRunning: false });
-        if (this.timeoutHandler) {
-            window.clearTimeout(this.timeoutHandler);
-            this.timeoutHandler = null;
-        }
-    };
-
-    runIteration() {
-        console.log("running iteration");
-        let newBoard = this.makeEmptyBoard();
-
-        for (let y = 0; y < this.rows; y++) {
-            for (let x = 0; x < this.cols; x++) {
-                let neighbors = this.calculateNeighbors(this.board, x, y);
-                if (this.board[y][x]) {
-                    if (neighbors === 2 || neighbors === 3) {
-                        newBoard[y][x] = true;
-                    } else {
-                        newBoard[y][x] = false;
-                    }
-                } else {
-                    if (!this.board[y][x] && neighbors === 3) {
-                        newBoard[y][x] = true;
-                    }
-                }
-            }
-        }
-
-        // TODO: Add logic for each iteration here.
-        this.board = newBoard;
-        this.setState({ cells: this.makeCells() });
-
-        this.timeoutHandler = window.setTimeout(() => {
-            this.runIteration();
-        }, this.state.interval);
-    }
-
-    /**
-     * Calculate the number of neighbors at point (x, y)
-     * @param {Array} board
-     * @param {int} x
-     * @param {int} y
-     */
-    calculateNeighbors(board, x, y) {
-        let neighbors = 0;
-        const dirs = [
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [0, 1],
-            [1, 1],
-            [1, 0],
-            [1, -1],
-            [0, -1]
-        ];
-        for (let i = 0; i < dirs.length; i++) {
-            const dir = dirs[i];
-            let y1 = y + dir[0];
-            let x1 = x + dir[1];
-
-            if (
-                x1 >= 0 &&
-                x1 < this.cols &&
-                y1 >= 0 &&
-                y1 < this.rows &&
-                board[y1][x1]
-            ) {
-                neighbors++;
-            }
-        }
-
-        return neighbors;
-    }
-
-    handleIntervalChange = event => {
-        this.state({ interval: event.target.value });
-    };
-
-    handleClear = () => {
-        this.board = this.makeEmptyBoard();
-        this.setState({ cells: this.makeCells() });
-    };
-
-    handleRandom = () => {
-        for (let y = 0; y < this.rows; y++) {
-            for (let x = 0; x < this.cols; x++) {
-                this.board[y][x] = Math.random() >= 0.5;
-            }
-        }
-
-        this.setState({ cells: this.makeCells() });
-    };
-
-    // Create an empty board
-    makeEmptyBoard() {
-        let board = [];
-        for (let y = 0; y < this.rows; y++) {
-            board[y] = [];
-            for (let x = 0; x < this.cols; x++) {
-                board[y][x] = false;
-            }
-        }
-        return board;
-    }
-
-    // Create cells from this.board
-    makeCells() {
-        let cells = [];
-        for (let y = 0; y < this.rows; y++) {
-            for (let x = 0; x < this.cols; x++) {
-                if (this.board[y][x]) {
-                    cells.push({ x, y });
-                }
-            }
-        }
-        return cells;
-    }
-
-    getElementOffset() {
-        const rect = this.boardRef.getBoundingClientRect();
-        const doc = document.documentElement;
-
-        return {
-            x: rect.left + window.pageXOffset - doc.clientLeft,
-            y: rect.top + window.pageYOffset - doc.clientTop
+        this.state = {
+            // state to count the generation
+            generation: 0,
+            // state for the full grid and create an array as big
+            // as the rows var and fill it using map and create
+            // another array as big as the columns var and each
+            // element in that array is false
+            gridFull: Array(this.rows)
+                .fill()
+                .map(() => Array(this.columns).fill(false))
         };
     }
 
-    handleClick = event => {
-        const elemOffset = this.getElementOffset();
-        const offsetX = event.clientX - elemOffset.x;
-        const offsetY = event.clientY - elemOffset.y;
+    // methods used:
 
-        const x = Math.floor(offsetX / CELL_SIZE);
-        const y = Math.floor(offsetY / CELL_SIZE);
-
-        if (x >= 0 && x <= this.cols && y >= 0 && y <= this.rows) {
-            this.board[y][x] = !this.board[y][x];
-        }
-
-        this.setState({ cells: this.makeCells() });
+    // the select cell method:
+    // whith select cell method, update the above array and set it to true when a cell is selected
+    selectCell = (row, column) => {
+        // create a copy of the array instead of changing the state of the gridFull straight
+        let gridCopy = arrayClone(this.state.gridFull);
+        // if it is selected, return true or keep it false
+        gridCopy[row][column] = !gridCopy[row][column];
+        this.setState({
+            gridFull: gridCopy
+        });
     };
 
+    // the random method:
+    // this method is going to make sure that some cells are randomly being selected by a single click
+    random = () => {
+        // create a copy of the grid
+        let gridCopy = arrayClone(this.state.gridFull);
+        // using for-loop, it should go through every cell of the grid and decide whether it should be selected or not
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                // randomly choose wether a cell stays selected of not
+                if (Math.floor(Math.random() * 4) === 1) {
+                    gridCopy[i][j] = true;
+                }
+            }
+        }
+        // if it is selected, return true
+        this.setState({
+            gridFull: gridCopy
+        });
+    };
+
+    // the play button method is to trigger the play method
+    playButton = () => {
+        // each time the user clicks the play button, it resets
+        clearInterval(this.intervalId);
+        this.intervalId = setInterval(this.playButton, this.speed);
+    };
+
+    // the pause button method to pause the play method
+    pauseButton = () => {
+        clearInterval(this.intervalId);
+    };
+
+    // setting the speed to 1000 msec
+    slow = () => {
+        this.speed = 1000;
+        this.playButton();
+    };
+
+    // setting the speed to 100 msec
+    fast = () => {
+        this.speed = 100;
+        this.playButton();
+    };
+
+    // setting the current state of the grid to false using a new variable
+    // and set the generation to zero
+    clear = () => {
+        var grid = Array(this.rows)
+            .fill()
+            .map(() => Array(this.columns).fill(false));
+        this.setState({
+            gridFull: grid,
+            generation: 0
+        });
+    };
+
+    // using switch statement, switch the sizes that are created in buttons.js
+    gridSize = size => {
+        switch (size) {
+            case "1":
+                this.columns = 20;
+                this.rows = 10;
+                break;
+            case "2":
+                this.columns = 50;
+                this.rows = 30;
+                break;
+            default:
+                this.columns = 70;
+                this.rows = 50;
+        }
+        this.clear();
+    };
+
+    // the play method:
+    play = () => {
+        // have the two copies of the grid
+        // check to see what the grid is currently like
+        let g = this.state.gridFull;
+        // and change the squares on the clone and set the state using the clone
+        let g2 = arrayClone(this.state.gridFull);
+        // all the rules for the game:
+        // go through every element in the grid
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                // count = how many neighbors does the cell have?
+                let count = 0;
+                // go through and if there is a neighbor, it increases the count by 1.
+                // note that each cell has 8 neighbors
+                if (i > 0) if (g[i - 1][j]) count++;
+                if (i > 0 && j > 0) if (g[i - 1][j - 1]) count++;
+                if (i > 0 && j < this.columns - 1) if (g[i - 1][j + 1]) count++;
+                if (j < this.columns - 1) if (g[i][j + 1]) count++;
+                if (j > 0) if (g[i][j - 1]) count++;
+                if (i < this.rows - 1) if (g[i + 1][j]) count++;
+                if (i < this.rows - 1 && j > 0) if (g[i + 1][j - 1]) count++;
+                if (i < this.rows - 1 && j < this.columns - 1)
+                    if (g[i + 1][j + 1]) count++;
+                // and check if they are going to die or live
+                // if it is less than 2 or more than 3, it dies.
+                if (g[i][j] && (count < 2 || count > 3)) g2[i][j] = false;
+                // if it is dead and it has 3 alive neighbors, it becomes alive cell.
+                if (!g[i][j] && count === 3) g2[j][j] = true;
+            }
+        }
+        this.setState({
+            // we add the gridFull and the generation plus 1
+            gridFull: g2,
+            generation: this.state.generation + 1
+        });
+    };
+
+    componentDidMount() {
+        // this method will randomly select cells
+        this.random();
+        // this will play the game
+        this.playButton();
+    }
+
     render() {
-        const { cells, interval, isRunning } = this.state;
         return (
             <div>
-                <div
-                    className="Board"
-                    style={{
-                        width: WIDTH,
-                        height: HEIGHT,
-                        backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`
-                    }}
-                    onClick={this.handleClick}
-                    ref={n => {
-                        this.boardRef = n;
-                    }}
-                >
-                    {cells.map(cell => (
-                        <Cell
-                            x={cell.x}
-                            y={cell.y}
-                            key={`${cell.x},${cell.y}`}
-                        />
-                    ))}
-                </div>
-
-                <div className="controls">
-                    Update every
-                    <input
-                        value={this.state.interval}
-                        onChange={this.handleIntervalChange}
-                    />
-                    msec
-                    {isRunning ? (
-                        <button className="button" onClick={this.stopGame}>
-                            Stop
-                        </button>
-                    ) : (
-                        <button className="button" onClick={this.runGame}>
-                            Run
-                        </button>
-                    )}
-                    <button className="button" onClick={this.handleRandom}>
-                        Random
-                    </button>
-                    <button className="button" onClick={this.handleClear}>
-                        Clear
-                    </button>
-                </div>
+                <h1 className="main-title">Conway's Game of Life</h1>
+                <Grid
+                    gridFull={this.state.gridFull}
+                    rows={this.rows}
+                    columns={this.columns}
+                    selectCell={this.selectCell}
+                />
+                <Buttons
+                    playButton={this.playButton}
+                    pauseButton={this.pauseButton}
+                    slow={this.slow}
+                    fast={this.fast}
+                    clear={this.clear}
+                    random={this.random}
+                    gridSize={this.gridSize}
+                />
                 <br />
                 <div className="text-box">
-                    <h3>Rules:</h3>
-                    <p>
-                        The universe of the Game of Life is an infinite,
-                        two-dimensional orthogonal grid of square cells, each of
-                        which is in one of two possible states, live or dead,
-                        (or populated and unpopulated, respectively). Every cell
-                        interacts with its eight neighbours, which are the cells
-                        that are horizontally, vertically, or diagonally
-                        adjacent. At each step in time, the following
-                        transitions occur:
-                        <ol>
-                            <li>
-                                Any live cell with fewer than two live
-                                neighbours dies, as if by underpopulation.
-                            </li>
-                            <li>
-                                Any live cell with two or three live neighbours
-                                lives on to the next generation.
-                            </li>
-                            <li>
-                                Any live cell with more than three live
-                                neighbours dies, as if by overpopulation.
-                            </li>
-                            <li>
-                                Any dead cell with exactly three live neighbours
-                                becomes a live cell, as if by reproduction.
-                            </li>
-                        </ol>
-                        These rules, which compare the behavior of the automaton
-                        to real life, can be condensed into the following:
-                        <ol>
-                            <li>
-                                Any live cell with two or three live neighbours
-                                survives.
-                            </li>
-                            <li>
-                                Any dead cell with three live neighbours becomes
-                                a live cell.
-                            </li>
-                            <li>
-                                All other live cells die in the next generation.
-                                Similarly, all other dead cells stay dead.
-                            </li>
-                        </ol>
-                        The initial pattern constitutes the seed of the system.
-                        The first generation is created by applying the above
-                        rules simultaneously to every cell in the seed; births
-                        and deaths occur simultaneously, and the discrete moment
-                        at which this happens is sometimes called a tick. Each
-                        generation is a pure function of the preceding one. The
-                        rules continue to be applied repeatedly to create
-                        further generations.
-                    </p>
+                    <About />
                 </div>
+                <p className="footer">Mirage Kamran - miragekamran@gmail.com</p>
             </div>
         );
     }
