@@ -170,6 +170,9 @@ class Game extends React.Component {
                     columns={this.columns}
                     selectCell={this.selectCell}
                 />
+                <h2 className="generations-title">
+                    Generations: {this.state.generation}
+                </h2>
                 <Buttons
                     playButton={this.playButton}
                     pauseButton={this.pauseButton}
