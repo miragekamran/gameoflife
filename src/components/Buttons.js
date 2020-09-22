@@ -11,8 +11,8 @@ class Buttons extends React.Component {
     // using React-Bootstrap to style the buttons
 
     // call the gridSize event from the Main.js
-    handleSelect = e => {
-        this.props.gridSize(e);
+    handleSelect = evt => {
+        this.props.gridSize(evt);
     };
 
     render() {
@@ -21,7 +21,7 @@ class Buttons extends React.Component {
             // Small = 20x10
             // Original = 50x30
             // Large = 70x50
-            <div className="buttonsCell">
+            <div className="buttonsBox">
                 <ButtonToolbar>
                     <Button className="buttons" onClick={this.props.playButton}>
                         Play
@@ -48,7 +48,7 @@ class Buttons extends React.Component {
                         className="buttons"
                         title="Grid Size"
                         id="dropdown-basic-button"
-                        onSelect={this.props.handleSelect}
+                        onSelect={this.handleSelect}
                     >
                         <Dropdown.Item eventKey="1">Small</Dropdown.Item>
                         <Dropdown.Item eventKey="2">Original</Dropdown.Item>

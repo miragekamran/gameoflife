@@ -4,7 +4,7 @@ import '../Game.css';
 class About extends React.Component {
     render() {
         return (
-            <div>
+            <div className="text-box">
                 <h1>About The Game:</h1>
                 <br></br>
                 <h2>What is Conway's Game of Life</h2>

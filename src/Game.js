@@ -3,6 +3,7 @@ import About from "./components/About";
 import arrayClone from "./components/helperFunctions";
 import Grid from "./components/Grid";
 import Buttons from "./components/Buttons";
+// import PatternButtons from './components/PatternButtons'
 import "./Game.css";
 
 class Game extends React.Component {
@@ -65,7 +66,7 @@ class Game extends React.Component {
     playButton = () => {
         // each time the user clicks the play button, it resets
         clearInterval(this.intervalId);
-        this.intervalId = setInterval(this.playButton, this.speed);
+        this.intervalId = setInterval(this.play, this.speed);
     };
 
     // the pause button method to pause the play method
@@ -143,7 +144,7 @@ class Game extends React.Component {
                 // if it is less than 2 or more than 3, it dies.
                 if (g[i][j] && (count < 2 || count > 3)) g2[i][j] = false;
                 // if it is dead and it has 3 alive neighbors, it becomes alive cell.
-                if (!g[i][j] && count === 3) g2[j][j] = true;
+                if (!g[i][j] && count === 3) g2[i][j] = true;
             }
         }
         this.setState({
@@ -182,10 +183,8 @@ class Game extends React.Component {
                     random={this.random}
                     gridSize={this.gridSize}
                 />
-                <br />
-                <div className="text-box">
-                    <About />
-                </div>
+               <br></br>
+                <About/>
                 <p className="footer">Mirage Kamran - miragekamran@gmail.com</p>
             </div>
         );

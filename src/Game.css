@@ -48,11 +48,11 @@ h4 {
   margin-bottom: -1px;
   }
 
-.off {
+.unselected {
   background-color: #fac028;
 }
 
-.on {
+.selected {
   background-color: black;
 }
   
@@ -70,7 +70,7 @@ h4 {
 }
 
 
-.buttonsCell {
+.buttonsBox {
   margin: auto;
   display: table;
   margin-top: 15px;
@@ -89,7 +89,7 @@ h4 {
   padding-left: 10px; */
   width: 85px;
 }
-/* 
+
 .patternButtonsCell {
   margin: auto;
   display: table;
@@ -101,10 +101,10 @@ h4 {
   padding-left: 105px;
   padding-bottom: 15px;
   border-style: dashed;
-  
+  /* width: 50%; */
 }
 
-.pattern-cells {
+.pattern-buttons {
   margin: 2px;
   width: 150px;
   margin-left: 10px;
@@ -117,7 +117,7 @@ h4 {
   margin-bottom: 15px;
 }
 
-.aboutCell {
+.aboutBox {
   margin: auto;
   display: table;
   margin-top: 15px;
@@ -131,46 +131,27 @@ h4 {
   width: 50%
 }
 
-.aboutCell-title {
+.aboutBox-title {
   font-size: 35px;
   color: #120065;
 }
 
-.aboutCell-secTitle {
+.aboutBox-secTitle {
   font-size: 30px;
   color: #ff2d00;
 }
 
-.aboutCell-thirdTitle {
+.aboutBox-thirdTitle {
   font-size: 30px;
   color: black;
 }
 
-.aboutCell-paragraph {
+.aboutBox-paragraph {
   font-size: 25px;
 }
 
-.aboutCell-ul {
+.aboutBox-ul {
   font-size: 25px;
-} */
-
-.footer {
-  color: white;
-  text-align: center;
-}
-
-
-.Board {
-    background-image: linear-gradient(#333 1px, transparent 1px),
-        linear-gradient(90deg, #333 1px, transparent 1px);
-    position: relative;
-    margin: 0 auto;
-    background-color: #000;
-}
-
-.Cell {
-    background: #ccc;
-    position: absolute;
 }
 
 .text-box {
@@ -182,3 +163,7 @@ h4 {
     text-align: left;
 }
 
+.footer {
+  color: white;
+  text-align: center;
+}
